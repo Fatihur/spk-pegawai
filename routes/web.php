@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     // Admin Only Routes
     Route::middleware('role:admin')->group(function () {
         Route::resource('pegawai', PegawaiController::class);
-        Route::resource('kriteria', KriteriaController::class);
+        Route::resource('kriteria', KriteriaController::class)->parameters(['kriteria' => 'kriteria']);
         Route::get('/kriteria/{kriteria}/subkriteria', [SubKriteriaController::class, 'index'])->name('subkriteria.index');
         Route::post('/kriteria/{kriteria}/subkriteria', [SubKriteriaController::class, 'store'])->name('subkriteria.store');
         Route::delete('/kriteria/{kriteria}/subkriteria/{subkriteria}', [SubKriteriaController::class, 'destroy'])->name('subkriteria.destroy');
