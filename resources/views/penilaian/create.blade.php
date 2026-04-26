@@ -12,57 +12,64 @@
             <input type="hidden" name="periode" value="{{ $periode }}">
             
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th style="min-width: 50px;">No</th>
-                            <th style="min-width: 200px;">Nama Pegawai</th>
-                            @foreach($kriteria as $k)
-                            <th class="text-center" style="min-width: 120px;">
-                                {{ $k->kode }}<br>
-                                <small class="text-muted fw-normal">{{ $k->nama }}</small>
-                            </th>
+                @if($pegawai->isEmpty())
+                    <div class="alert alert-success mt-3">
+                        <i class="bi bi-check-circle me-2"></i>Semua pegawai sudah dinilai untuk periode ini. Tidak ada pegawai baru yang perlu diinput.
+                    </div>
+                @else
+                    <table class="table table-bordered" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 50px;">No</th>
+                                <th style="min-width: 200px;">Nama Pegawai</th>
+                                @foreach($kriteria as $k)
+                                <th class="text-center" style="min-width: 120px;">
+                                    {{ $k->kode }}<br>
+                                    <small class="text-muted fw-normal">{{ $k->nama }}</small>
+                                </th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($pegawai as $i => $p)
+                            <tr>
+                                <td>{{ $i + 1 }}</td>
+                                <td>
+                                    <strong>{{ $p->nama }}</strong><br>
+                                    <small class="text-muted">{{ $p->jabatan }}</small>
+                                </td>
+                                @foreach($kriteria as $k)
+                                <td class="text-center">
+                                    <select name="nilai[{{ $p->id }}][{{ $k->id }}]" class="form-select form-select-sm" required>
+                                        <option value="">-</option>
+                                        <option value="5">5</option>
+                                        <option value="4">4</option>
+                                        <option value="3">3</option>
+                                        <option value="2">2</option>
+                                        <option value="1">1</option>
+                                    </select>
+                                </td>
+                                @endforeach
+                            </tr>
                             @endforeach
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($pegawai as $i => $p)
-                        <tr>
-                            <td>{{ $i + 1 }}</td>
-                            <td>
-                                <strong>{{ $p->nama }}</strong><br>
-                                <small class="text-muted">{{ $p->jabatan }}</small>
-                            </td>
-                            @foreach($kriteria as $k)
-                            <td class="text-center">
-                                <select name="nilai[{{ $p->id }}][{{ $k->id }}]" class="form-select form-select-sm" required>
-                                    @php
-                                        $existingNilai = $penilaianExisting[$p->id][$k->id] ?? null;
-                                    @endphp
-                                    <option value="">-</option>
-                                    <option value="5" {{ $existingNilai == 5 ? 'selected' : '' }}>5</option>
-                                    <option value="4" {{ $existingNilai == 4 ? 'selected' : '' }}>4</option>
-                                    <option value="3" {{ $existingNilai == 3 ? 'selected' : '' }}>3</option>
-                                    <option value="2" {{ $existingNilai == 2 ? 'selected' : '' }}>2</option>
-                                    <option value="1" {{ $existingNilai == 1 ? 'selected' : '' }}>1</option>
-                                </select>
-                            </td>
-                            @endforeach
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                @endif
             </div>
 
+            @if($pegawai->isNotEmpty())
             <div class="alert alert-info mt-3">
                 <small>
                     <strong>Keterangan Nilai:</strong> 5 = Sangat Baik, 4 = Baik, 3 = Cukup, 2 = Kurang, 1 = Sangat Kurang
                 </small>
             </div>
+            @endif
 
             <div class="d-flex flex-wrap gap-2 mt-3">
                 <a href="{{ route('penilaian.index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
-                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Simpan Semua Penilaian</button>
+                @if($pegawai->isNotEmpty())
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i>Simpan Penilaian</button>
+                @endif
             </div>
         </form>
     </div>
@@ -72,16 +79,18 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable({
-            paging: false,
-            searching: true,
-            info: false,
-            ordering: false,
-            language: {
-                search: "Cari Pegawai:",
-                zeroRecords: "Pegawai tidak ditemukan"
-            }
-        });
+        if ($('#dataTable').length > 0) {
+            $('#dataTable').DataTable({
+                paging: false,
+                searching: true,
+                info: false,
+                ordering: false,
+                language: {
+                    search: "Cari Pegawai:",
+                    zeroRecords: "Pegawai tidak ditemukan"
+                }
+            });
+        }
     });
 </script>
 @endsection

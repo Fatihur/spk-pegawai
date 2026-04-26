@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">NIP / ID Pegawai</label>
-                    <input type="text" name="nip" class="form-control @error('nip') is-invalid @enderror" value="{{ old('nip') }}" required>
+                    <input type="number" name="nip" class="form-control @error('nip') is-invalid @enderror" value="{{ old('nip') }}" required>
                     @error('nip')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-6 mb-3">

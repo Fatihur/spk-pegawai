@@ -89,8 +89,8 @@
                                             <i class="bi bi-eye"></i>
                                         </a>
                                         @if(!$sudahDihitung)
-                                        <a href="{{ route('penilaian.create', ['periode' => $p]) }}" class="btn btn-outline-warning" title="Edit Penilaian">
-                                            <i class="bi bi-pencil"></i>
+                                        <a href="{{ route('penilaian.create', ['periode' => $p]) }}" class="btn btn-outline-warning" title="Input Pegawai Baru">
+                                            <i class="bi bi-person-plus"></i>
                                         </a>
                                         <a href="{{ route('perhitungan.hitung', ['periode' => $p]) }}" class="btn btn-outline-success" title="Hitung MFEP">
                                             <i class="bi bi-calculator"></i>

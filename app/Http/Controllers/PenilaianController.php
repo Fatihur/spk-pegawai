@@ -44,6 +44,10 @@ class PenilaianController extends Controller
             $penilaianExisting[$p->pegawai_id][$p->kriteria_id] = $p->nilai;
         }
         
+        // Filter pegawai yang belum dinilai
+        $pegawaiSudahDinilaiIds = array_keys($penilaianExisting);
+        $pegawai = Pegawai::whereNotIn('id', $pegawaiSudahDinilaiIds)->orderBy('nama')->get();
+        
         return view('penilaian.create', compact('pegawai', 'kriteria', 'periode', 'penilaianExisting'));
     }
 
