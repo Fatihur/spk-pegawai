@@ -13,8 +13,8 @@
             
             <div class="table-responsive">
                 @if($pegawai->isEmpty())
-                    <div class="alert alert-success mt-3">
-                        <i class="bi bi-check-circle me-2"></i>Semua pegawai sudah dinilai untuk periode ini. Tidak ada pegawai baru yang perlu diinput.
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>Belum ada pegawai yang terdaftar. Silakan tambah pegawai terlebih dahulu.
                     </div>
                 @else
                     <table class="table table-bordered" id="dataTable">
@@ -39,14 +39,13 @@
                                     <small class="text-muted">{{ $p->jabatan }}</small>
                                 </td>
                                 @foreach($kriteria as $k)
+                                @php $nilaiExisting = $penilaianExisting[$p->id][$k->id] ?? ''; @endphp
                                 <td class="text-center">
                                     <select name="nilai[{{ $p->id }}][{{ $k->id }}]" class="form-select form-select-sm" required>
                                         <option value="">-</option>
-                                        <option value="5">5</option>
-                                        <option value="4">4</option>
-                                        <option value="3">3</option>
-                                        <option value="2">2</option>
-                                        <option value="1">1</option>
+                                        @foreach([5,4,3,2,1] as $v)
+                                        <option value="{{ $v }}" {{ $nilaiExisting == $v ? 'selected' : '' }}>{{ $v }}</option>
+                                        @endforeach
                                     </select>
                                 </td>
                                 @endforeach

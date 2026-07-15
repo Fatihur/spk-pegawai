@@ -34,19 +34,15 @@ class PenilaianController extends Controller
                 ->with('error', 'Periode ' . \Carbon\Carbon::parse($periode)->translatedFormat('F Y') . ' sudah dihitung. Penilaian tidak dapat diubah.');
         }
 
-        $pegawai = Pegawai::orderBy('nama')->get();
         $kriteria = Kriteria::orderBy('kode')->get();
         
-        // Get existing penilaian for this periode
         $penilaianExisting = [];
         $existing = Penilaian::where('periode', $periode)->get();
         foreach ($existing as $p) {
             $penilaianExisting[$p->pegawai_id][$p->kriteria_id] = $p->nilai;
         }
         
-        // Filter pegawai yang belum dinilai
-        $pegawaiSudahDinilaiIds = array_keys($penilaianExisting);
-        $pegawai = Pegawai::whereNotIn('id', $pegawaiSudahDinilaiIds)->orderBy('nama')->get();
+        $pegawai = Pegawai::orderBy('nama')->get();
         
         return view('penilaian.create', compact('pegawai', 'kriteria', 'periode', 'penilaianExisting'));
     }
